@@ -3,7 +3,7 @@ import axios from 'axios'
 
 
 const config = {
-   baseURL: 'https://localhost:44317/api/ApiRollCallSystem', 
+   baseURL: 'https://localhost:44366/api', 
    headers: { 
     'Access-Control-Allow-Origin' : '*',
     'Access-Control-Allow-Methods' : 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
@@ -20,11 +20,11 @@ const loggerInterceptor = config => {
 // httpClient.interceptors.request.use(authInterceptor);
 httpClient.interceptors.request.use(
   function (config) {
-    const token = sensitiveStorage.getToken()
+    // const token = sensitiveStorage.getToken()
 
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`
-    }
+    // if (token) {
+    //   config.headers.Authorization = `Bearer ${token}`
+    // }
 
 
     return config

@@ -1,20 +1,22 @@
+import { Button, makeStyles } from '@material-ui/core';
+import * as firebase from 'firebase/app';
+import 'firebase/auth';
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-import { makeStyles, Button, Grid, Typography } from '@material-ui/core';
-import ProductContainer from './containers/ProductContainer';
-import AppBarTop from './components/AppBar/AppBarTop';
-import routes from './routes';
-import {sleep} from './general/helper';
-
 import {
   BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
+
+  Route, Switch
 } from "react-router-dom";
+import './App.css';
+import AppBarTop from './components/AppBar/AppBarTop';
 import Footer from './components/Footer/Footer';
 import Alertity from './general/ConmmonComponent/Alertify';
+import firebaseConfig from './general/firebaseConfig';
+import routes from './routes';
+
+
+
+// const firebaseApp = firebase.initializeApp(firebaseConfig);
 
 const makeStyle = makeStyles({
   root: {

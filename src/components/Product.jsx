@@ -57,18 +57,6 @@ function Product(props){
     const viewDetailProduct = (id)=>{
       let path = Paths.detailProduct.split(":");
       history.push(path[0]+id);
-      axios.get('https://localhost:44333/Download/GetMusic?id=1')
-      .then(function (response) {
-        // handle success
-        window.open(response);
-      })
-      .catch(function (error) {
-        // handle error
-        console.log(error);
-      })
-      .then(function () {
-        // always executed
-      });
     }
     return (
         <Card className={classes.root} variant="outlined">

@@ -9,6 +9,8 @@ import { useHistory } from "react-router-dom";
 import Account from './Account';
 import logo from '../../assests/brand_logo.jpg';
 import { Paths } from '../../routes';
+import { GetMenu } from '../../actions/GetMenu/CallApi';
+import menuTree from '../../reducers/menu-tree';
 
 
 const useStyles = makeStyles({
@@ -88,20 +90,19 @@ function Menu() {
     const [mapMenu, SetMapMenu] = useState(new Map());
     const classes = useStyles();
     const menuTrees = useSelector(state => state.menuTrees);
+    const dispatch = useDispatch();
     useEffect(()=>{
-        let testMap = GetDistionatyMenu(mapMenu, menuTrees);
-        SetMapMenu(testMap);
+        dispatch(GetMenu())
+        console.log("menu trees:", menuTrees);
+        //let mapMenu = GetDistionatyMenu(mapMenu, menuTrees.data ? menuTrees.data.data.data : []);
+        //let mapMenu = menuTree();
+        //SetMapMenu(mapMenu);
         window.addEventListener("scroll", _handleScroll)
     }, []);
     const _handleScroll = () =>{
         setScrPosition(window.pageYOffset);
 
-        // if(window.pageYOffset >= 100){
-        // }
     }
-    
-
-    const dispatch = useDispatch();
 
     const _handleRedirect = (menuItem) =>{
         let breadCrumbMenu = [];
@@ -137,19 +138,17 @@ function Menu() {
     
     return (
         <div className={`${classes.root} ${scrPosition > 102 ? classes.fixedMenu :null}`}>
+            <img style={{display : scrPosition > 102 ? "block" : "none"}} onClick={onClickLogo} src={logo} width="100px"/>
             {
-                scrPosition > 102 ? (
-                    <img onClick={onClickLogo} src={logo} width="100px"/>
-                ):null
-            }
-            {
-                RenderTreeMenu(menuTrees)
+                menuTrees ? 
+                RenderTreeMenu(menuTrees): null
             }
             {
                 scrPosition > 102 ? (
                     <Account/>
                 ):null
             }
+
         </div>
     )
 };

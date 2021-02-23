@@ -6,6 +6,7 @@ import {BreadCrumb} from './breadcrumb';
 import {recuderNewProduct} from './new-product';
 import {recuderHotSale} from './hot-sale-product';
 import {alert} from './alert';
+import apiReducer from './Menu/menu-reducer';
 
 const appReducers = combineReducers({
     products : product,
@@ -14,6 +15,7 @@ const appReducers = combineReducers({
     breadCrumb : BreadCrumb,
     recuderNewProduct: recuderNewProduct,
     productHotSales : recuderHotSale,
-    alert: alert
+    alert: alert,
+    apiReducer: apiReducer
 });
 export default appReducers;
