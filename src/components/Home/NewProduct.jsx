@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { makeStyles, Grid } from '@material-ui/core';
+import { makeStyles, Grid, Button } from '@material-ui/core';
 import { useSelector } from 'react-redux';
 import Product from '../Product';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import SelectInput from '@material-ui/core/Select/SelectInput';
 import {sleep} from '../../general/helper';
-import product from '../../reducers/products';
+import * as Firebase from 'firebase'
+
 
 const useStyles = makeStyles({
     root:{
@@ -55,8 +56,6 @@ const useStyles = makeStyles({
 });
 export default function NewProduct(props){
     const classes = useStyles();
-    const allProducts = useSelector(state => state.products);
-    const products = allProducts.filter(i=> i.isNew == true);
     let ref = React.createRef();
     const nextSlider = async ()=>{
         for(let i = 0; i< 265; i+=10){
@@ -70,8 +69,59 @@ export default function NewProduct(props){
             ref.current.scrollLeft -=10;
         }
     }
+    const db = Firebase.firestore();
+    // const _addFireStorage = ()=>{
+    //     let sizes = [
+    //         {
+    //             id:1,
+    //             name: "XS"
+    //         },
+    //         {
+    //             id:2,
+    //             name: "S"
+    //         },
+    //         {
+    //             id:3,
+    //             name: "M"
+    //         },
+    //         {
+    //             id:4,
+    //             name: "L"
+    //         },
+    //         {
+    //             id:5,
+    //             name: "XL"
+    //         },
+    //         {
+    //             id:6,
+    //             name: "XXL"
+    //         }
+    //     ]
+    //     for(let size of sizes){
+    //         db.collection("size").doc(size.name).set(size)
+    //         .then(() => {
+    //             console.log("Document successfully written!");
+    //         })
+    //         .catch((error) => {
+    //             console.error("Error writing document: ", error);
+    //         });
+    //     }
+    // }
+    const _updateData = ()=>{
+
+    }
+    const rootRef = db.collection("products").where("name", "array-contains", "Vớ")
+                    .get()
+                    .then((res)=>{
+                        console.log("res:", res);
+                        res.forEach(i=>{
+                            console.log("i", i.data())
+                        })
+                    })
+                    .catch(e => console.log("err:",e))
     return (
         <div className={classes.root}>
+            {/* <Button onClick={_addFireStorage}>Thêm data</Button> */}
             <div className={classes.title}>
                 SẢN PHẨM MỚI
             </div>
@@ -81,7 +131,7 @@ export default function NewProduct(props){
             <div ref={ref} className={classes.containerItem}>
                 
                 {
-                    products.map((i,index)=>{
+                    props.products.map((i,index)=>{
                         return (
                             <div key={index} className={classes.item}>
                                 <Product

@@ -8,6 +8,7 @@ export const GET_PRODUCT_BY_ID = "GET_PRODUCT_BY_ID";
 export const ADD_ALERT = "ADD_ALERT";
 export const REMOVE_ALERT = "REMOVE_ALERT";
 export const CLEAR_ALERT = "CLEAR_ALERT";
+export const SELECT_SIZE = "SELECT_SIZE";
 
 //call api redux thunk
 export const FETCH_POST_REQUEST = "FETCH_POST_REQUEST";

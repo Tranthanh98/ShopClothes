@@ -92,11 +92,8 @@ function Menu() {
     const menuTrees = useSelector(state => state.menuTrees);
     const dispatch = useDispatch();
     useEffect(()=>{
-        dispatch(GetMenu())
-        console.log("menu trees:", menuTrees);
-        //let mapMenu = GetDistionatyMenu(mapMenu, menuTrees.data ? menuTrees.data.data.data : []);
-        //let mapMenu = menuTree();
-        //SetMapMenu(mapMenu);
+        let testMap = GetDistionatyMenu(mapMenu, menuTrees);
+        SetMapMenu(testMap);
         window.addEventListener("scroll", _handleScroll)
     }, []);
     const _handleScroll = () =>{

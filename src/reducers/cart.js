@@ -1,13 +1,19 @@
 import * as types from '../constants/ActionType';
 
-var data = JSON.parse(localStorage.getItem("CART"));
-
-const initCart = [
-    
-];
+let initCart = [];
+let cartsLocal = localStorage.getItem('persist:carts');
+let temp = JSON.parse(cartsLocal);
+if(temp){
+    let tempCart = JSON.parse(temp.carts);
+    initCart = tempCart;
+}
 
 export const reducerCart = (state = initCart, action)=>{
+    let cart
     switch(action.type){
+        // case REHYDRATE:{
+        //     return [...state];
+        // }
         case types.ADD_TO_CART:{
             let newProduct = {
                 product: action.product,
@@ -37,6 +43,11 @@ export const reducerCart = (state = initCart, action)=>{
         case types.SUB_QUANTITY:{
             let newState = [...state];
             let index = state.findIndex(i=> i.product == action.product);
+            if(action.quantity <= 0){
+                newState.splice(index, 1);
+                return newState;
+            }
+
             newState[index].quantity = action.quantity;
             return newState;
         }
@@ -46,6 +57,17 @@ export const reducerCart = (state = initCart, action)=>{
             newState[index].quantity = action.quantity;
             return newState;
         }
+        case types.SELECT_SIZE:{
+            let newState = [...state];
+            let index = state.findIndex(i=> i.product == action.product);
+            if(index == -1){
+                index = state.findIndex(i=> i.product == action.product);
+            }
+            newState[index].size = action.size;
+            return newState;
+        }
+        default:
+            return [...state];
         
     }
     return state;

@@ -4,37 +4,32 @@ import { Carousel } from 'react-responsive-carousel';
 import img1 from '../../assests/slideshow_2.jpg';
 import img2 from '../../assests/slideshow_3.jpg';
 import img3 from '../../assests/slideshow_4.jpg';
+import * as Firebase from 'firebase'
+
  
 class CarouselHomePage extends Component {
     constructor(props){
         super(props);
         this.state={
-            carouselArr:[]
+            carouselArr:[],
+            img:""
         }
     }
     componentDidMount(){
-        this.setState({
-            carouselArr: [
-                {
-                   "id":0,
-                   "image":img1,
-                   "name":"https://routine.vn/pages/summer-collection-20",
-                   "price":null
-                },
-                {
-                   "id":1,
-                   "image":img2,
-                   "name":"https://routine.vn/pages/summer-collection-20",
-                   "price":null
-                },
-                {
-                   "id":2,
-                   "image":img3,
-                   "name":"https://routine.vn/blogs/thong-bao/mung-sinh-nhat-qua-toi-chan-that",
-                   "price":null
-                }
-             ]
-        })
+        const images = Firebase.storage();
+        const pathRef = images.ref().child('image-slideshow');
+
+        pathRef.listAll()
+            .then(res => {
+                let datas = [];
+                res.items.forEach(img=> {
+                    img.getDownloadURL()
+                            .then((url) => datas.push(url))
+                            .catch(e => console.log("err:",e));
+                });
+                this.setState({carouselArr: datas});
+            })
+            .catch(e => console.log("err:",e));
     }
 
     render() {
@@ -44,7 +39,7 @@ class CarouselHomePage extends Component {
                     this.state.carouselArr.map((i, index)=>{
                         return (
                             <div key={index}>
-                                <img src={i.image} width="80vh" alt=""/>
+                                <img src={i} width="80vh" alt=""/>
                             </div>
                         )
                     })

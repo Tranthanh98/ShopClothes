@@ -8,6 +8,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { actClickHome } from '../../actions';
 import { Paths } from '../../routes';
+import BaseModal from '../BaseModal';
+import MenuIcon from '@material-ui/icons/Menu';
+import MenuMobile from './MenuMobile';
 
 const useStyle = makeStyles({
     root: {
@@ -32,14 +35,19 @@ const useStyle = makeStyles({
     breadCrumb:{
         borderTop:"2px solid #f3f3f3",
         borderBottom:"2px solid #f3f3f3",
+    },
+    rootMobile:{
+        display:"flex",
+        margin:"20px"
     }
 })
 
-function AppBarTop() {
+function AppBarTop(props) {
     let history = useHistory();
     const classes = useStyle();
     const [state, setState] = useState({slide: 0, lastScrollY: 0});
     const breadCrumbList = useSelector(state=> state.breadCrumb);
+    const menuTrees = useSelector(state => state.menuTrees);
 
     const dispatch = useDispatch();
 
@@ -48,19 +56,38 @@ function AppBarTop() {
         history.push(Paths.home);
     }
     return (
-        <div>
-            <div className={classes.root}>
-                Mua mọi thứ tại Avatar. Hotline: <b style={{ fontFamily: "monospace" }}>0986056412</b>. Email : <b style={{ color: "red", fontFamily: "monospace" }}>trantienthanh2412@gmail.com</b>
-            </div>
-            <div className={classes.brandShop}>
-                <img onClick={onClickLogo} src={logo} width="12%"/>
-                <Account/>
-            </div>
-            <Menu/>
-            <div className={classes.breadCrumb}>
-                <BreadCrumb arrayBreadCrumb={breadCrumbList}/>
-            </div>
-        </div>
+                props.isMobile ? (
+                    <div className={classes.rootMobile}>
+                        <div style={{flexGrow:1}}>
+                            <BaseModal
+                                modalBody={<MenuMobile menuList={menuTrees}/>}
+                                iconClassName="fas fa-bars fa-2x"
+                                dir="left"
+                                width="70vw"
+                            />
+                        </div>
+                        <div style={{flexGrow:3, justifyContent:"center"}}>
+                            <img onClick={onClickLogo} src={logo} width="25%"/>
+                        </div>
+                        <div style={{flexGrow:1}}>
+                            <Account/>
+                        </div>
+                    </div>
+                ) : (
+                    <>
+                        <div className={classes.root}>
+                            Mua mọi thứ tại Avatar. Hotline: <b style={{ fontFamily: "monospace" }}>0986056412</b>. Email : <b style={{ color: "red", fontFamily: "monospace" }}>trantienthanh2412@gmail.com</b>
+                        </div>
+                        <div className={classes.brandShop}>
+                            <img onClick={onClickLogo} src={logo} width="12%"/>
+                            <Account/>
+                        </div>
+                        <Menu/>
+                        <div className={classes.breadCrumb}>
+                            <BreadCrumb arrayBreadCrumb={breadCrumbList}/>
+                        </div>
+                    </>
+                )
     );
 };
 

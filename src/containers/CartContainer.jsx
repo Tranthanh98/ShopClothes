@@ -1,15 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/styles';
 import { Grid, Typography, IconButton, TextField, Button } from '@material-ui/core';
 import RemoveIcon from '@material-ui/icons/Remove';
 import AddIcon from '@material-ui/icons/Add';
 import CloseIcon from '@material-ui/icons/Close';
-import { actDeleteItem, plusQuantity, subQuantity } from '../actions/index';
+import { actDeleteItem, getProductSize, plusQuantity, selectSize, subQuantity } from '../actions/index';
 import { formatMoney } from '../general/helper';
 import RenderSize from '../components/Cart/RenderSize';
 import { useHistory } from 'react-router-dom';
 import { Paths } from '../routes';
+import * as Firebase from 'firebase';
 
 const useStyles = makeStyles({
     rootCart: {
@@ -38,17 +39,14 @@ const CartContainer = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
 
+    const [sizes, setSize] = useState([]);
     const totalPrice = carts.reduce((price, item) => {
         return price += (Number(item.product.price) * Number(item.quantity))
-    }, 0)
-    const _handleSetSize = (size) =>{
-
-    }
+    }, 0);
     const _handlePayment = ()=>{
         props.closeWhenDirect(()=>{
             history.push(Paths.payment);
         })
-
     }
     return (
         <div className={classes.rootCart}>
@@ -60,7 +58,7 @@ const CartContainer = (props) => {
                             {
                                 carts.map((item, index) => {
                                     return (
-                                        <Grid key={item.product.id} container>
+                                        <Grid key={item.product.id + index + item.product.name} container>
                                             <Grid item xs={4}>
                                                 <img width="70%" src={item.product.image} />
                                             </Grid>
@@ -68,6 +66,13 @@ const CartContainer = (props) => {
                                                 <Typography>{item.product.name}</Typography>
                                                 <Typography color="error">{formatMoney(item.product.price, "₫")}</Typography>
                                                 <Typography>Size: <b>{item.size ? item.size : "Chưa chọn size"}</b></Typography>
+                                                <RenderSize 
+                                                    listSize={item.product.size} 
+                                                    sizeSelected={item.size} 
+                                                    onChangeSize={(sizeSelected)=>{
+                                                        dispatch(selectSize(item.product, sizeSelected))}
+                                                    }
+                                                />
                                                 <div className={classes.quantity}>
                                                     <IconButton>
                                                         <RemoveIcon onClick={() => dispatch(subQuantity(item.product, item.quantity))} />

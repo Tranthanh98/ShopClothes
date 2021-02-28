@@ -1,6 +1,6 @@
 import * as types from '../constants/ActionType';
 
-let initialState = [
+export let initialState = [
    {
       "id": 1,
       "image": "//product.hstatic.net/1000341789/product/mausac_white_dsc_0828_2e8785e1e87c43e89410d112d964306c_1024x1024.jpg",

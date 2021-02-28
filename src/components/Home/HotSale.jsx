@@ -21,8 +21,8 @@ const useStyles = makeStyles({
 })
 function HotSale(props){
     const classes = useStyles();
-    const allProducts = useSelector(state => state.products);
-    const productHotSale = allProducts.filter(i => i.isHotSale);
+    // const allProducts = useSelector(state => state.products);
+    // const productHotSale = allProducts.filter(i => i.isHotSale);
      return (
          <div>
             <div className={classes.horizol}></div>
@@ -31,7 +31,7 @@ function HotSale(props){
             </div>
             <Grid container spacing={2}>
                 {
-                    productHotSale.map((i,index)=>{
+                    props.products.map((i,index)=>{
                         return (
                             <Grid item key={i.id} item xs={12} sm={6} md={3} lg={3}>
                                 <Product

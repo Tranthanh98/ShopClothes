@@ -9,6 +9,13 @@ export const actAddToCart = (product, quantity, size) =>{
         size
     }
 }
+export const selectSize = (product, size) =>{
+    return {
+        type: types.SELECT_SIZE,
+        product,
+        size
+    }
+}
 export const actDeleteItem = (product)=>{
     return {
         type: types.DELETE_ITEM,

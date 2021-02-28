@@ -1,15 +1,12 @@
-import React, { useState } from 'react';
-import clsx from 'clsx';
-import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
-import SearchIcon from '@material-ui/icons/Search';
-import { TextField } from '@material-ui/core';
-import ClearIcon from '@material-ui/icons/Clear';
-
+import { makeStyles } from '@material-ui/core/styles';
+import React, { useState } from 'react';
 
 const useStyles = makeStyles({
+  rootModal:{
+    width:"100vw",
+  },
   list: {
-    width: 350,
     padding:"10px"
   },
   titleSearch:{
@@ -37,50 +34,49 @@ function useOnChangeInput(){
 
 export default function BaseModal(props) {
   const classes = useStyles();
-  const [right, setState] = React.useState(false);
+  const [state, setState] = React.useState({
+    left: false,
+    right:false
+  });
 
-  const [value, _onChange] = useOnChangeInput();
-
-  const toggleDrawer = (open) => (event) => {
+  const toggleDrawer = (anchor, open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
       return;
     }
 
-    setState(open);
+    setState({ ...state, [anchor]: open });
   };
+  const _closeModal = ()=>{
+    console.log("props:", props.dir);
+    toggleDrawer(props.dir, false);
+  }
+  let body = React.cloneElement(
+    props.modalBody,
+    {
+      closeModal: _closeModal
+    }
+  )
 
-  const rightModal = () => (
+  const list = (anchor) => (
     <div
       className={classes.list}
+      style={{width:props.width}}
       role="presentation"
     >
-        {
-            props.modalBody
-        }
+        {body}
     </div>
   );
 
+  
   return (
     <div>
       <React.Fragment>
-          <SearchIcon onClick={toggleDrawer(true)}></SearchIcon>
-          {
-              props.right ? (
-                <Drawer anchor="right" open={right} onClose={toggleDrawer("right", false)}>
-                    {rightModal()}
-                </Drawer>
-              ) : (
-                <Modal
-                    open={right}
-                    onClose={toggleDrawer(true)}
-                    aria-labelledby="simple-modal-title"
-                    aria-describedby="simple-modal-description"
-                >
-                    {props.modalBody}
-                </Modal>
-              )
-          }
-          
+          <div onClick={toggleDrawer(props.dir, true)}>
+            <i className={props.iconClassName}></i>
+          </div>
+          <Drawer anchor={props.dir} open={state[props.dir]} onClose={toggleDrawer(props.dir, false)}>
+            {list(props.dir)}
+          </Drawer>
         </React.Fragment>
     </div>
   );
