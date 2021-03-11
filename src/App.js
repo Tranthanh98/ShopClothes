@@ -1,7 +1,7 @@
 import { Button, makeStyles } from '@material-ui/core';
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   BrowserRouter as Router,
 
@@ -20,7 +20,7 @@ import routes from './routes';
 
 const makeStyle = makeStyles({
   root: {
-    padding: "20px",
+    padding: "80px 20px 20px 20px",
     // fontFamily: "'Quicksand', sans-serif !important"
   },
   blockForm :{
@@ -41,6 +41,24 @@ const makeStyle = makeStyles({
       background: "#fbfbfb",
       color: "#050505",
       width: "50%"
+  },
+  btnScrollTop:{
+    // display:"flex",
+    alignItems:"center",
+    justifyContent:"center",
+    backgroundColor: "rgb(192,183,183,0.4)",
+    borderRadius:"4px",
+    height:40,
+    width:40,
+    position:'fixed',
+    bottom:70,
+    right:45,
+    // border:"1px solid grey",
+    cursor:"pointer",
+    transition:"opacity 1s",
+    // "&:hover":{
+    //   width:300
+    // }
   }
 })
 window.mobileCheck = function() {
@@ -51,6 +69,22 @@ window.mobileCheck = function() {
 function App() {
   const classes = makeStyle();
   const isMobile = window.mobileCheck();
+  const onScroll = (e)=>{
+    var value = e.target.documentElement.scrollTop;
+    var mybutton = document.getElementById("btn");
+    if (value > 200) {
+      mybutton.style.opacity = 1;
+    } else {
+      mybutton.style.opacity = 0;
+    }
+
+  }
+  const scrollToTop = (e)=>{
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  }
+  useEffect(()=>{
+    window.addEventListener('scroll', onScroll);
+  },[]);
   return (
     <Router>
       <AppBarTop isMobile={isMobile}/>
@@ -73,6 +107,9 @@ function App() {
         </div>
         <Footer/>
         <Alertity/>
+        <button onClick={scrollToTop} id="btn" className={classes.btnScrollTop}>
+          <i class="fas fa-arrow-up"></i>
+        </button>
       </div>
     </Router>
   );

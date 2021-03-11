@@ -1,11 +1,14 @@
 
 import { makeStyles } from '@material-ui/styles';
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { actClickHome } from '../../actions';
+import { Paths } from '../../routes';
 
 const useStyles = makeStyles({
     rootMenu:{
-        padding:"8px"
+        padding:"75px 8px 8px 8px"
     },
     titleMenu:{
         textTransform:"uppercase",
@@ -27,7 +30,7 @@ const useStyles = makeStyles({
     }
 })
 
-const RenderMenuMobile = (menus, isChild = false)=>{
+const RenderMenuMobile = (menus, props, isChild = false)=>{
     const [showMenu, setShowMenu] = useState([]);
     const classes = useStyles();
     const _openMenu =(idMenu)=>{
@@ -42,7 +45,8 @@ const RenderMenuMobile = (menus, isChild = false)=>{
         setShowMenu(cloneData);
     }
     const history = useHistory();
-    const _gotoMenu = (link)=>{
+    const _gotoMenu = (event, link)=>{
+        props.closeModal(event)
         history.push(link);
     }
     return (
@@ -50,7 +54,7 @@ const RenderMenuMobile = (menus, isChild = false)=>{
             return (
                 <div className={showMenu.includes(menu.id) || !isChild ? classes.showSubMenu : classes.hideSubMenu}>
                     <div key={index} className={classes.menuWrapper}>
-                        <div onClick={()=>_gotoMenu(menu.link)} style={{marginRight:4, fontFamily:"monospace", fontSize:15}}>
+                        <div onClick={(event)=>_gotoMenu(event, menu.link)} style={{marginRight:4, fontFamily:"monospace", fontSize:15}}>
                             {menu.name}
                         </div>
                         <div>
@@ -62,7 +66,7 @@ const RenderMenuMobile = (menus, isChild = false)=>{
                         </div>
                     </div>
                     {menu.items ? 
-                            RenderMenuMobile(menu.items, true)
+                            RenderMenuMobile(menu.items,props, true)
                         : null}
                 </div>
             )
@@ -72,14 +76,24 @@ const RenderMenuMobile = (menus, isChild = false)=>{
 
 function MenuMobile(props){
     const classes = useStyles();
+    const history = useHistory();
+    const dispatch = useDispatch();
+    const _gotoHome = (event)=>{
+        props.closeModal(event);
+        dispatch(actClickHome());
+        history.push(Paths.home);
+    }
     return (
         <div className={classes.rootMenu}>
             <div className={classes.titleMenu}>
                 MENU
             </div>
+            <div onClick={_gotoHome} style={{marginRight:4, fontFamily:"monospace", fontSize:15}}>
+                Trang chủ
+            </div>
             <div>
                 {
-                    RenderMenuMobile(props.menuList)
+                    RenderMenuMobile(props.menuList, props)
                 }
             </div>
         </div>

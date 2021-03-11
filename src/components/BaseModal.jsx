@@ -7,7 +7,7 @@ const useStyles = makeStyles({
     width:"100vw",
   },
   list: {
-    padding:"10px"
+    padding:"50px 10px 10px 10px",
   },
   titleSearch:{
       display:"flex",
@@ -46,9 +46,9 @@ export default function BaseModal(props) {
 
     setState({ ...state, [anchor]: open });
   };
-  const _closeModal = ()=>{
+  const _closeModal = (event)=>{
     console.log("props:", props.dir);
-    toggleDrawer(props.dir, false);
+    toggleDrawer(props.dir, false)(event);
   }
   let body = React.cloneElement(
     props.modalBody,
@@ -67,11 +67,14 @@ export default function BaseModal(props) {
     </div>
   );
 
-  
+  const _clickItemMenu = (event)=>{
+    console.log("state:", !state[props.dir]);
+    toggleDrawer(props.dir, !state[props.dir])(event)
+  }
   return (
     <div>
       <React.Fragment>
-          <div onClick={toggleDrawer(props.dir, true)}>
+          <div onClick={_clickItemMenu}>
             <i className={props.iconClassName}></i>
           </div>
           <Drawer anchor={props.dir} open={state[props.dir]} onClose={toggleDrawer(props.dir, false)}>

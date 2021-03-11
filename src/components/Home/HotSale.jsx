@@ -12,7 +12,8 @@ const useStyles = makeStyles({
         cursor:"pointer",
         "&:hover":{
             color:"#337ab7"
-        }
+        },
+        textAlign:"center",
     },
     horizol : {
         borderTop: "5px solid #f3f3f3",

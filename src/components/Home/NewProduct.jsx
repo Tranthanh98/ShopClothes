@@ -25,10 +25,15 @@ const useStyles = makeStyles({
     },
     containerItem:{
         display:"flex",
-        overflowX:"hidden",
+        overflowX:"auto",
         width:"100%",
-        
-        
+        '&::-webkit-scrollbar': {
+            height: '8px',
+          },
+          '&::-webkit-scrollbar-thumb': {
+            backgroundColor: 'rgba(0,0,0,.1)',
+            borderRadius:"8px"
+          }
     },
     item:{
         width:"315px",
@@ -113,7 +118,6 @@ export default function NewProduct(props){
     const rootRef = db.collection("products").where("name", "array-contains", "Vớ")
                     .get()
                     .then((res)=>{
-                        console.log("res:", res);
                         res.forEach(i=>{
                             console.log("i", i.data())
                         })
