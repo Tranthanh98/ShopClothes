@@ -5,7 +5,7 @@ import { Grid, Typography, IconButton, TextField, Button } from '@material-ui/co
 import RemoveIcon from '@material-ui/icons/Remove';
 import AddIcon from '@material-ui/icons/Add';
 import CloseIcon from '@material-ui/icons/Close';
-import { actDeleteItem, getProductSize, plusQuantity, selectSize, subQuantity } from '../actions/index';
+import { actDeleteItem, addAlert, getProductSize, plusQuantity, selectSize, subQuantity } from '../actions/index';
 import { formatMoney } from '../general/helper';
 import RenderSize from '../components/Cart/RenderSize';
 import { useHistory } from 'react-router-dom';
@@ -48,6 +48,10 @@ const CartContainer = (props) => {
             history.push(Paths.payment);
         })
     }
+    const _deleteItemFromCart = (item)=>{
+        dispatch(actDeleteItem(item.product));
+        dispatch(addAlert("Xóa thành công", "success"));
+    }
     return (
         <div className={classes.rootCart}>
             {
@@ -84,7 +88,7 @@ const CartContainer = (props) => {
                                                 </div>
                                             </Grid>
                                             <Grid item xs={1}>
-                                                <CloseIcon onClick={() => dispatch(actDeleteItem(item.product))} />
+                                                <CloseIcon onClick={() => _deleteItemFromCart(item)} />
                                             </Grid>
                                         </Grid>
                                     )

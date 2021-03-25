@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {Grid, Typography, makeStyles} from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { actAddToCart, addAlert, getProductById } from '../actions';
@@ -83,7 +83,9 @@ function DetailProduct(props){
     const stateProduct = useSelector(state => state.products);
     const [quantity, increaseQuantity, decreaseQuantity, onChangeQuantity] = useQuantity(1);
     const dispatch = useDispatch();
+    
     useEffect(()=>{
+        window.scrollTo(0,0);
         let proD = stateProduct.find(i=> i.id == props.match.params.id);
         setProduct(proD);
         
@@ -93,7 +95,8 @@ function DetailProduct(props){
     }
     const _handleAddCart = ()=>{
         if(sizeSelected){
-            dispatch(actAddToCart(product, quantity, sizeSelected))
+            dispatch(actAddToCart(product, quantity, sizeSelected));
+            dispatch(addAlert("Thêm vào giỏ thành công", "success"));
         }
         else{
             dispatch(addAlert("Bạn phải chọn size trước", "error"))
@@ -101,43 +104,42 @@ function DetailProduct(props){
     }
     return (
         <div>
-           
-                {product ? (
-                    <Grid container spacing={3}>
-                        <Grid item xs={6}>
-                            <img width="100%" src={product.image}/>
-                        </Grid>
-                        <Grid item xs={6}>
-                            <Typography variant="h6">{product.name}</Typography>
-                            <Typography className={classes.container} color="error">{formatMoney(product.price)}đ</Typography>
-                            <div className={classes.container}>{
-                                product.description.split("-").map((m, index)=>{
-                                    return <Typography key={index}>-{m}</Typography>
-                                })
-                                
-                            }</div>
-                            <RenderSize
-                                listSize={product.size}
-                                sizeSelected={sizeSelected}
-                                onChangeSize={_handleSetSize}
-                            />
-                            <div className={classes.formQuantity}>
-                                <div className={classes.btn}>
-                                    <RemoveIcon onClick={decreaseQuantity}/>
-                                </div>
-                                <div>
-                                    <input value={quantity} onChange={onChangeQuantity} className={classes.inputText}/>
-                                </div>
-                                <div className={classes.btn}>
-                                    <AddIcon onClick={increaseQuantity}/>
-                                </div>
-                            </div>
-                            
-                            <button onClick={_handleAddCart} className={classes.btnAddCart}>THÊM VÀO GIỎ</button>
-                            
-                        </Grid>
+            {product ? (
+                <Grid container spacing={3}>
+                    <Grid item xs={6}>
+                        <img width="100%" src={product.image}/>
                     </Grid>
-                ):null}
+                    <Grid item xs={6}>
+                        <Typography variant="h6">{product.name}</Typography>
+                        <Typography className={classes.container} color="error">{formatMoney(product.price)}đ</Typography>
+                        <div className={classes.container}>{
+                            product.description.split("-").map((m, index)=>{
+                                return <Typography key={index}>-{m}</Typography>
+                            })
+                            
+                        }</div>
+                        <RenderSize
+                            listSize={product.size}
+                            sizeSelected={sizeSelected}
+                            onChangeSize={_handleSetSize}
+                        />
+                        <div className={classes.formQuantity}>
+                            <div className={classes.btn}>
+                                <RemoveIcon onClick={decreaseQuantity}/>
+                            </div>
+                            <div>
+                                <input value={quantity} onChange={onChangeQuantity} className={classes.inputText}/>
+                            </div>
+                            <div className={classes.btn}>
+                                <AddIcon onClick={increaseQuantity}/>
+                            </div>
+                        </div>
+                        
+                        <button onClick={_handleAddCart} className={classes.btnAddCart}>THÊM VÀO GIỎ</button>
+                        
+                    </Grid>
+                </Grid>
+            ):null}
         </div>
     )
 }

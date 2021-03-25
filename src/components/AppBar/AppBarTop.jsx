@@ -40,7 +40,7 @@ const useStyle = makeStyles({
         margin: "0 0 20px 0",
         display: "flex",
         position: "fixed",
-        zIndex: "9999",
+        zIndex: "10",
         background: "white",
         padding: "20px"
     }

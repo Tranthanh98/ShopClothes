@@ -108,7 +108,7 @@ function App() {
         <Footer/>
         <Alertity/>
         <button onClick={scrollToTop} id="btn" className={classes.btnScrollTop}>
-          <i class="fas fa-arrow-up"></i>
+          <i className="fas fa-arrow-up"></i>
         </button>
       </div>
     </Router>

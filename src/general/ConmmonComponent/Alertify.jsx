@@ -65,8 +65,12 @@ function Alertity(props){
                     }
                     return (
                         <div key={i.id} className={`${classes.wrapper} ${classAlert}`}>
-                            {i.title}
-                            <CloseIcon onClick={()=>dispatch(removeAlert(i.id))}/>
+                            <div style={{width:"90%"}}>
+                                {i.title}
+                            </div>
+                            <div>
+                                <CloseIcon onClick={()=>dispatch(removeAlert(i.id))}/>
+                            </div>
                         </div>
                     )
                 })
