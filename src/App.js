@@ -53,12 +53,9 @@ const makeStyle = makeStyles({
     position:'fixed',
     bottom:70,
     right:45,
-    // border:"1px solid grey",
     cursor:"pointer",
     transition:"opacity 1s",
-    // "&:hover":{
-    //   width:300
-    // }
+    
   }
 })
 window.mobileCheck = function() {

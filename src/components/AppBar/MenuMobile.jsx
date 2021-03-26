@@ -1,13 +1,16 @@
 
 import { makeStyles } from '@material-ui/styles';
-import React, { useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { actClickHome } from '../../actions';
 import { Paths } from '../../routes';
 import $, { isPlainObject } from 'jquery';
 import { Grid, Typography } from '@material-ui/core';
 import RoomIcon from '@material-ui/icons/Room';
+import {selecteMenuItem} from '../../actions/index';
+import { ContentFooterHOC } from '../Footer/Footer';
+import { COMPANY, POLICY } from '../Footer/footer-content';
 
 
 const useStyles = makeStyles({
@@ -53,6 +56,9 @@ const useStyles = makeStyles({
         },
         display: "flex",
         alignItems: "center",
+    },
+    selectedMenu:{
+        color:"#fcd15c"
     }
 })
 const MenuItem = (props) => {
@@ -61,6 +67,12 @@ const MenuItem = (props) => {
     const refIcon = useRef();
     const classes = useStyles();
     let isOpen = false;
+    const history = useHistory();
+    const _gotoMenu = (event, menu) => {
+        props.setMenu(menu.id)
+        props.closeModal(event)
+        history.push(menu.link);
+    }
     const _openSubMenu = () =>{
         if(isOpen === true){
             $(refMenu.current).css("display", "none");
@@ -76,7 +88,7 @@ const MenuItem = (props) => {
     return (
         <>
             <div className={classes.menuItem}>
-                <div>
+                <div className={props.isSelected ? classes.selectedMenu : null} onClick={(e) => _gotoMenu(e, menu)}>
                     {menu.name}
                 </div>
                 {
@@ -91,7 +103,7 @@ const MenuItem = (props) => {
                 menu.items ? (
                     <div ref={refMenu} style={{ paddingLeft: 8, display:"none", borderLeft:"1px solid gray", transition: "display 0.5s" }}>
                         {
-                            RenderMenuMobile(menu.items, props, true)
+                            RenderMenuMobile(menu.items, props)
                         }
                     </div>
                 ) : null
@@ -100,17 +112,13 @@ const MenuItem = (props) => {
     )
 }
 
-const RenderMenuMobile = (menus, props, isChild = false) => {
-    const [showMenu, setShowMenu] = useState(0);
-    const refMenu = useRef();
+const RenderMenuMobile = (menus, props) => {
     const classes = useStyles();
-    const _openMenu = (idMenu) => {
-        setShowMenu(idMenu);
-    }
-    const history = useHistory();
-    const _gotoMenu = (event, link) => {
-        props.closeModal(event)
-        history.push(link);
+    const {closeModal} = props;
+    const selectedMenu = useSelector(state => state.selectMenu);
+    const dispatch = useDispatch();
+    const setMenu = (id)=>{
+        dispatch(selecteMenuItem(id));
     }
     return (
         <div className={classes.menuWrapper}>
@@ -118,7 +126,7 @@ const RenderMenuMobile = (menus, props, isChild = false) => {
                 menus.map((menu, index) => {
                     return (
                         <div key={menu.id}>
-                            <MenuItem menu={menu}/>
+                            <MenuItem isSelected={selectedMenu == menu.id} setMenu={setMenu} closeModal={closeModal} menu={menu}/>
                         </div>
                     )
                 })
@@ -131,7 +139,9 @@ function MenuMobile(props) {
     const classes = useStyles();
     const history = useHistory();
     const dispatch = useDispatch();
+    const menuSeleted = useSelector(state => state.selectMenu);
     const _gotoHome = (event) => {
+        dispatch(selecteMenuItem(-1));
         props.closeModal(event);
         dispatch(actClickHome());
         history.push(Paths.home);
@@ -144,7 +154,7 @@ function MenuMobile(props) {
             <div className={classes.titleMenu}>
                 MENU
             </div>
-            <div onClick={_gotoHome} className={classes.menuItem}>
+            <div onClick={_gotoHome} className={`${classes.menuItem} ${menuSeleted == -1 ? classes.selectedMenu : null}`}>
                 Trang chủ
             </div>
             <div>
@@ -153,20 +163,12 @@ function MenuMobile(props) {
                 }
             </div>
             <div>
-                <Grid item xs={12} md={3}>
-                    <Typography className={classes.pointer} variant="h6">Thông tin cửa hàng</Typography>
-                    <Typography style={{marginLeft:4}} className={classes.pointer}>
-                        <RoomIcon />
-                    103 Sư Vạn Hạnh</Typography>
-                    <Typography style={{marginLeft:4}} className={classes.pointer}><RoomIcon />408 Điện Biên Phủ</Typography>
-                    <Typography style={{marginLeft:4}} className={classes.pointer}><RoomIcon />601 Hai Bà Trưng</Typography>
-                </Grid>
-                <Grid item xs={12} md={3}>
-                    <Typography className={classes.pointer} variant="h6">Công ty</Typography>
-                    <Typography style={{marginLeft:4}} className={classes.pointer}>Tuyển dụng</Typography>
-                    <Typography style={{marginLeft:4}} className={classes.pointer}>Hệ thống cửa hàng</Typography>
-                    <Typography style={{marginLeft:4}} className={classes.pointer}>Chăm sóc khách hàng</Typography>
-                </Grid>
+                {
+                    ContentFooterHOC(COMPANY.title)(COMPANY.content)
+                }
+                {
+                    ContentFooterHOC(POLICY.title)(POLICY.content)
+                }
             </div>
         </div>
     )

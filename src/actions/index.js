@@ -77,3 +77,9 @@ export const clearAlert =()=>{
         type: types.CLEAR_ALERT
     }
 }
+export const selecteMenuItem = (id)=>{
+    return {
+        type: types.SELECT_MENU,
+        selected: id
+    }
+}

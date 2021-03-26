@@ -9,6 +9,7 @@ export const ADD_ALERT = "ADD_ALERT";
 export const REMOVE_ALERT = "REMOVE_ALERT";
 export const CLEAR_ALERT = "CLEAR_ALERT";
 export const SELECT_SIZE = "SELECT_SIZE";
+export const SELECT_MENU = "SELECT_MENU";
 
 //call api redux thunk
 export const FETCH_POST_REQUEST = "FETCH_POST_REQUEST";
