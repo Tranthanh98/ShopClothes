@@ -62,56 +62,29 @@ const useStyles = makeStyles({
 export default function NewProduct(props){
     const classes = useStyles();
     let ref = React.createRef();
-    const nextSlider = async ()=>{
-        for(let i = 0; i< 265; i+=10){
-            await sleep(1);
-            ref.current.scrollLeft +=10;
+    const nextSlider = ()=>{
+        let currPosition = ref.current.scrollLeft;
+        let nextPosition;
+        if(currPosition % 265 == 0){
+            nextPosition =  currPosition + 265;
         }
+        else{
+            nextPosition = Math.ceil(currPosition / 265) * 265;
+        }
+        ref.current.scrollTo({left: nextPosition, behavior: "smooth"});
     }
     const prevSlider = async() =>{
-        for(let i = 0; i< 265; i+=10){
-            await sleep(1);
-            ref.current.scrollLeft -=10;
+        let currPosition = ref.current.scrollLeft;
+        let nextPosition;
+        if(currPosition % 265 == 0){
+            nextPosition =  currPosition - 265;
         }
+        else{
+            nextPosition = Math.floor(currPosition/265) * 265;
+        }
+        ref.current.scrollTo({left: nextPosition, behavior: "smooth"});
     }
     const db = Firebase.firestore();
-    // const _addFireStorage = ()=>{
-    //     let sizes = [
-    //         {
-    //             id:1,
-    //             name: "XS"
-    //         },
-    //         {
-    //             id:2,
-    //             name: "S"
-    //         },
-    //         {
-    //             id:3,
-    //             name: "M"
-    //         },
-    //         {
-    //             id:4,
-    //             name: "L"
-    //         },
-    //         {
-    //             id:5,
-    //             name: "XL"
-    //         },
-    //         {
-    //             id:6,
-    //             name: "XXL"
-    //         }
-    //     ]
-    //     for(let size of sizes){
-    //         db.collection("size").doc(size.name).set(size)
-    //         .then(() => {
-    //             console.log("Document successfully written!");
-    //         })
-    //         .catch((error) => {
-    //             console.error("Error writing document: ", error);
-    //         });
-    //     }
-    // }
     const _updateData = ()=>{
 
     }

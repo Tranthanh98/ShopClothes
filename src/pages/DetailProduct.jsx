@@ -22,7 +22,13 @@ const useStyles = makeStyles({
     btn: {
         width:25,
         height:25,
-        backgroundColor:"#f3f3f3"
+        backgroundColor:"#f3f3f3",
+        cursor:"pointer",
+        "&:hover":{
+            backgroundColor:"black",
+            color:"white"
+        },
+        margin:"0 4px 0 4px"
     },
     inputText : {
         width: 70,
@@ -106,10 +112,10 @@ function DetailProduct(props){
         <div>
             {product ? (
                 <Grid container spacing={3}>
-                    <Grid item xs={6}>
+                    <Grid item md={6} xs={12}>
                         <img width="100%" src={product.image}/>
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item md={6} xs={12}>
                         <Typography variant="h6">{product.name}</Typography>
                         <Typography className={classes.container} color="error">{formatMoney(product.price)}đ</Typography>
                         <div className={classes.container}>{

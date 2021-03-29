@@ -37,7 +37,7 @@ const useStyle = makeStyles({
         borderBottom:"2px solid #f3f3f3",
     },
     rootMobile:{
-        margin: "0 0 20px 0",
+        // margin: "0 0 20px 0",
         display: "flex",
         position: "fixed",
         zIndex: "10",

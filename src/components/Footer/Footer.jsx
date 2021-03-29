@@ -27,7 +27,7 @@ export function ContentFooterHOC(content){
     }
     return function (arrContent){
         return (
-            <Grid item xs={12} md={3}>
+            <Grid item xs={12} sm={6} md={3}>
                 <Typography className={classes.pointer} variant="h6">{content}</Typography>
                 {
                     arrContent.map((i, index)=>{

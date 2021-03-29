@@ -20,7 +20,7 @@ export const reducerCart = (state = initCart, action)=>{
                 quantity: action.quantity,
                 size: action.size
             }
-            let index = state.findIndex(i=> i.product == action.product);
+            let index = state.findIndex(i=> i.product.id == action.product.id && i.size == action.size);
             if(index == -1){
                 return [
                     ...state,
@@ -59,7 +59,7 @@ export const reducerCart = (state = initCart, action)=>{
         }
         case types.SELECT_SIZE:{
             let newState = [...state];
-            let index = state.findIndex(i=> i.product == action.product);
+            let index = state.findIndex(i=> i.product.id == action.product.id && i.size == action.size);
             if(index == -1){
                 index = state.findIndex(i=> i.product == action.product);
             }

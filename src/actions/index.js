@@ -9,7 +9,19 @@ export const actAddToCart = (product, quantity, size) =>{
         size
     }
 }
-export const selectSize = (product, size) =>{
+export const selectSize = (product, size, carts) =>{
+    let index = carts.findIndex(i=> i.product.id == product.id && i.size == size);
+    if(index != -1){
+        let id = helper.random(4);
+        return {
+            type: types.ADD_ALERT,
+            content : {
+                id : id,
+                title : `Sản phẩm này đã có size ${size} trong giỏ hàng`,
+                status: "error"
+            }
+        }
+    }
     return {
         type: types.SELECT_SIZE,
         product,

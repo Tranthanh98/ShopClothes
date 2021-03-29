@@ -19,7 +19,7 @@ const useStyles = makeStyles({
     },
     titleMenu: {
         textTransform: "uppercase",
-        fontFamily: "monospace",
+        fontFamily: "'Quicksand', sans-serif !important",
         fontSize: "30px",
         marginBottom: "16px"
     },
@@ -31,7 +31,7 @@ const useStyles = makeStyles({
     menuItem: {
         display: "flex",
         textTransform: "uppercase",
-        fontFamily: "monospace",
+        fontFamily: "'Quicksand', sans-serif !important",
         fontSize: "20px",
         margin: "8px 0 8px 0",
         cursor:"pointer"

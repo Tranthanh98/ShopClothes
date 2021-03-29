@@ -20,7 +20,7 @@ import routes from './routes';
 
 const makeStyle = makeStyles({
   root: {
-    padding: "80px 20px 20px 20px",
+    padding: "20px 20px 20px 20px",
     // fontFamily: "'Quicksand', sans-serif !important"
   },
   blockForm :{

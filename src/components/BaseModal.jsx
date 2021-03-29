@@ -47,7 +47,6 @@ export default function BaseModal(props) {
     setState({ ...state, [anchor]: open });
   };
   const _closeModal = (event)=>{
-    console.log("props:", props.dir);
     toggleDrawer(props.dir, false)(event);
   }
   let body = React.cloneElement(
@@ -68,7 +67,6 @@ export default function BaseModal(props) {
   );
 
   const _clickItemMenu = (event)=>{
-    console.log("state:", !state[props.dir]);
     toggleDrawer(props.dir, !state[props.dir])(event)
   }
   return (

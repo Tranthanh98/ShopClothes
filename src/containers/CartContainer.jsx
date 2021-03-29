@@ -44,6 +44,12 @@ const CartContainer = (props) => {
         return price += (Number(item.product.price) * Number(item.quantity))
     }, 0);
     const _handlePayment = ()=>{
+        for(let cart of carts){
+            if(!cart.size){
+                dispatch(addAlert("Còn sản phẩm chưa chọn size", "error"));
+                return;
+            }
+        }
         props.closeWhenDirect(()=>{
             history.push(Paths.payment);
         })
@@ -74,7 +80,7 @@ const CartContainer = (props) => {
                                                     listSize={item.product.size} 
                                                     sizeSelected={item.size} 
                                                     onChangeSize={(sizeSelected)=>{
-                                                        dispatch(selectSize(item.product, sizeSelected))}
+                                                        dispatch(selectSize(item.product, sizeSelected, carts))}
                                                     }
                                                 />
                                                 <div className={classes.quantity}>
