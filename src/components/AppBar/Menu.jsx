@@ -4,7 +4,7 @@ import { Typography } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { useSelector, useDispatch } from 'react-redux';
 import { GetDistionatyMenu } from '../../general/DistionaryMenuTree';
-import {actBreadCrumb, actClickHome} from '../../actions/index';
+import { actBreadCrumb, actClickHome } from '../../actions/index';
 import { useHistory } from "react-router-dom";
 import Account from './Account';
 import logo from '../../assests/brand_logo.jpg';
@@ -18,67 +18,77 @@ const useStyles = makeStyles({
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        fontFamily :"'Quicksand', sans-serif!important"
+        fontFamily: "'Quicksand', sans-serif!important"
     },
     dropDown: {
-        position: "relative",
-        "&:hover > div": {
-            display: "block",
-        },
-        "&:hover .MuiSvgIcon-root":{
-            transform: "rotate(180deg)",
-        },
         paddingLeft: "5px",
         paddingRight: "5px",
         display: "flex",
-        alignItems:"center"
+        alignItems: "center",
+        "&:hover > div": {
+            display: "block",
+        },
+        "&:hover .MuiSvgIcon-root": {
+            transform: "rotate(180deg)",
+        },
+        position: "relative",
     },
     dropdownContent: {
-        display: "none",
-        position: "absolute",
+        display: "flex",
         backgroundColor: "#f9f9f9",
         boxShadow: "0px 8px 16px 0px rgba(0,0,0,0.2)",
-        padding: "12px 16px",
+        padding: "8px 8px",
         zIndex: 1,
         minWidth: "170px",
         alignItems: "center",
         justifyContent: "center",
-        top : "20px",
-        transition :"display 0.5s",
-        "&:hover > div":{
-            display:"block"
+        transition: "display 0.5s",
+        "&:hover > div": {
+            display: "block"
         },
-    },
-    selectItem: {
-        margin: "5px",
-        display: "flex",
-        cursor: "pointer",
-        "&:hover": {
-            backgroundColor: "#f3f3f3"
+        "&:hover .MuiSvgIcon-root": {
+            transform: "rotate(90deg)",
         },
-        borderBottom: "1px solid gray"
+        "&:hover":{
+            backgroundColor:"#d8d6d6"
+        },
+        borderBottom: "1px solid #d8d6d6"
     },
-    iconDropDown:{
+    iconDropDown: {
         transition: "transform 0.5s",
     },
-    subMenuPosition:{
-        left: "50px"
-    },
-    fixedMenu:{
+    fixedMenu: {
         position: "fixed",
-        top : "15px",
+        top: "15px",
         backgroundColor: "#f3f3f3",
-        boxShadow:"0px 8px 8px 0px rgba(0,0,0,0.2)",
+        boxShadow: "0px 8px 8px 0px rgba(0,0,0,0.2)",
         width: "100%",
-        zIndex:2,
+        zIndex: 2,
         transition: "all 1s",
-        height:45
+        height: 45
+    },
+    menuItemCss: {
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        cursor: "pointer",
+        margin: "0 8px 0 8px",
+    },
+    menuWrapper: {
+        display: "flex",
+        alignItems: "center"
+    },
+    childMenuWrapper: {
+        display: "none",
+        position: "absolute",
+        top: 0,
+        zIndex:10
     }
 })
 
-function GetBreadCrumb(breadCrumb, mapMenu, menuItem){
+function GetBreadCrumb(breadCrumb, mapMenu, menuItem) {
     breadCrumb.unshift(menuItem);
-    if(mapMenu.get(menuItem) != null){
+    if (mapMenu.get(menuItem) != null) {
         GetBreadCrumb(breadCrumb, mapMenu, mapMenu.get(menuItem))
     }
 }
@@ -91,60 +101,83 @@ function Menu() {
     const classes = useStyles();
     const menuTrees = useSelector(state => state.menuTrees);
     const dispatch = useDispatch();
-    useEffect(()=>{
+    useEffect(() => {
         //dispatch(GetMenu());
         let testMap = GetDistionatyMenu(mapMenu, menuTrees);
         SetMapMenu(testMap);
         window.addEventListener("scroll", _handleScroll)
     }, []);
-    const _handleScroll = () =>{
+    const _handleScroll = () => {
         setScrPosition(window.pageYOffset);
 
     }
 
-    const _handleRedirect = (menuItem) =>{
+    const _handleRedirect = (menuItem) => {
         let breadCrumbMenu = [];
         GetBreadCrumb(breadCrumbMenu, mapMenu, menuItem)
-        
+
         dispatch(actBreadCrumb(breadCrumbMenu));
         history.push(menuItem.link);
     }
-    const onClickLogo =()=>{
+    const onClickLogo = () => {
         dispatch(actClickHome());
         history.push(Paths.home);
     }
 
     const RenderTreeMenu = (menuTrees, isChild = false) => {
-        return menuTrees.map((menuItem, index) => {
-            return (
-                <div key={menuItem.id} className={classes.dropDown}>
-                    <span onClick={()=>_handleRedirect(menuItem)} style={{cursor:"pointer"}} className={isChild ? classes.selectItem : ""} >{menuItem.name}</span>
-                    {menuItem.items ? <ExpandMoreIcon classes={{
-                        root: classes.iconDropDown
-                    }}/> : null}
-                    {
-                        menuItem.items ? (
-                            <div className={classes.dropdownContent}>{RenderTreeMenu(menuItem.items, true)}</div>
-                        ) : null
-    
-                    }
-                    
-                </div>
-            )
-        })
+        return (
+            <div className={classes.childMenuWrapper} style={{ top: isChild ? "0px" : 20, left: isChild ? "186px" : 0 }}>
+                {
+                    menuTrees.map((menuItem, index) => {
+                        return (
+                            <div key={index} className={classes.dropdownContent}>
+                                <span onClick={() => _handleRedirect(menuItem)} style={{ cursor: "pointer" }}>{menuItem.name}</span>
+                                {menuItem.items ? <ExpandMoreIcon classes={{
+                                    root: classes.iconDropDown
+                                }} /> : null}
+                                {
+                                    menuItem.items ? (
+                                        RenderTreeMenu(menuItem.items, true)
+                                    ) : null
+
+                                }
+                            </div>
+                        )
+                    })
+                }
+            </div>
+        )
     }
-    
+
     return (
-        <div className={`${classes.root} ${scrPosition > 102 ? classes.fixedMenu :null}`}>
-            <img style={{display : scrPosition > 102 ? "block" : "none"}} onClick={onClickLogo} src={logo} width="100px"/>
-            {
-                menuTrees ? 
-                RenderTreeMenu(menuTrees): null
-            }
+        <div className={`${classes.root} ${scrPosition > 102 ? classes.fixedMenu : null}`}>
+            <img style={{ display: scrPosition > 102 ? "block" : "none" }} onClick={onClickLogo} src={logo} width="100px" />
+            <div className={classes.menuWrapper}>
+                {
+                    menuTrees.map((menuItem, index) => {
+                        return (
+                            <div className={classes.dropDown} key={index}>
+                                <span onClick={() => _handleRedirect(menuItem)} className={classes.menuItemCss}>{menuItem.name}
+                                    {menuItem.items ? <ExpandMoreIcon classes={{
+                                        root: classes.iconDropDown
+                                    }} /> : null}
+
+                                </span>
+                                {
+                                    menuItem.items ? (
+                                        RenderTreeMenu(menuItem.items)
+                                    ) : null
+
+                                }
+                            </div>
+                        )
+                    })
+                }
+            </div>
             {
                 scrPosition > 102 ? (
-                    <Account/>
-                ):null
+                    <Account />
+                ) : null
             }
 
         </div>

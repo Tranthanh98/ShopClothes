@@ -42,7 +42,7 @@ const useStyle = makeStyles({
         position: "fixed",
         zIndex: "10",
         background: "white",
-        padding: "20px"
+        padding: "20px 20px 0px 20px"
     }
 })
 

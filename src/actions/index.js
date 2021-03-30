@@ -2,15 +2,18 @@ import * as types from '../constants/ActionType';
 import * as helper from '../general/helper';
 
 export const actAddToCart = (product, quantity, size) =>{
+    let id = helper.random(4);
     return {
         type: types.ADD_TO_CART,
         product,
         quantity,
-        size
+        size,
+        id: id
     }
 }
-export const selectSize = (product, size, carts) =>{
+export const selectSize = (product, size, carts, idItem) =>{
     let index = carts.findIndex(i=> i.product.id == product.id && i.size == size);
+    // console.log("index action:", index);
     if(index != -1){
         let id = helper.random(4);
         return {
@@ -25,7 +28,8 @@ export const selectSize = (product, size, carts) =>{
     return {
         type: types.SELECT_SIZE,
         product,
-        size
+        size,
+        id: idItem,
     }
 }
 export const actDeleteItem = (product)=>{
@@ -45,19 +49,19 @@ export const actClickHome = () =>{
         type: types.ONCLICK_HOME
     }
 }
-export const subQuantity = (product, quantity)=>{
+export const subQuantity = (id, quantity)=>{
     quantity--;
     return {
         type: types.SUB_QUANTITY,
-        product,
+        id,
         quantity
     }
 }
-export const plusQuantity = (product, quantity)=>{
+export const plusQuantity = (id, quantity)=>{
     quantity++;
     return {
         type: types.PLUS_QUANTITY,
-        product,
+        id,
         quantity
     }
 }

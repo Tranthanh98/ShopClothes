@@ -85,7 +85,7 @@ function App() {
   return (
     <Router>
       <AppBarTop isMobile={isMobile}/>
-      <div className={classes.root}>
+      <div className={classes.root} style={{position:isMobile ? "absolute": "", top:isMobile ? 60 : null}}>
         <Switch>
           {
             routes.map((route, index) => {

@@ -18,7 +18,8 @@ export const reducerCart = (state = initCart, action)=>{
             let newProduct = {
                 product: action.product,
                 quantity: action.quantity,
-                size: action.size
+                size: action.size,
+                id : action.id
             }
             let index = state.findIndex(i=> i.product.id == action.product.id && i.size == action.size);
             if(index == -1){
@@ -36,13 +37,13 @@ export const reducerCart = (state = initCart, action)=>{
         }
         case types.DELETE_ITEM:{
             let newState = [...state];
-            let index = state.findIndex(i=> i.product == action.product);
+            let index = state.findIndex(i=> i.id == action.id);
             newState.splice(index,1);
             return newState;
         }
         case types.SUB_QUANTITY:{
             let newState = [...state];
-            let index = state.findIndex(i=> i.product == action.product);
+            let index = state.findIndex(i=> i.id == action.id);
             if(action.quantity <= 0){
                 newState.splice(index, 1);
                 return newState;
@@ -53,16 +54,16 @@ export const reducerCart = (state = initCart, action)=>{
         }
         case types.PLUS_QUANTITY:{
             let newState = [...state];
-            let index = state.findIndex(i=> i.product == action.product);
+            let index = state.findIndex(i=> i.id == action.id);
             newState[index].quantity = action.quantity;
             return newState;
         }
         case types.SELECT_SIZE:{
             let newState = [...state];
-            let index = state.findIndex(i=> i.product.id == action.product.id && i.size == action.size);
-            if(index == -1){
-                index = state.findIndex(i=> i.product == action.product);
+            const predicate = (e)=>{
+                return e.id == action.id
             }
+            let index = state.findIndex(predicate);
             newState[index].size = action.size;
             return newState;
         }

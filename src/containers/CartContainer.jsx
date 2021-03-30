@@ -55,7 +55,7 @@ const CartContainer = (props) => {
         })
     }
     const _deleteItemFromCart = (item)=>{
-        dispatch(actDeleteItem(item.product));
+        dispatch(actDeleteItem(item.id));
         dispatch(addAlert("Xóa thành công", "success"));
     }
     return (
@@ -80,16 +80,16 @@ const CartContainer = (props) => {
                                                     listSize={item.product.size} 
                                                     sizeSelected={item.size} 
                                                     onChangeSize={(sizeSelected)=>{
-                                                        dispatch(selectSize(item.product, sizeSelected, carts))}
+                                                        dispatch(selectSize(item.product, sizeSelected, carts, item.id))}
                                                     }
                                                 />
                                                 <div className={classes.quantity}>
                                                     <IconButton>
-                                                        <RemoveIcon onClick={() => dispatch(subQuantity(item.product, item.quantity))} />
+                                                        <RemoveIcon onClick={() => dispatch(subQuantity(item.id, item.quantity))} />
                                                     </IconButton>
                                                     <Typography>{item.quantity}</Typography>
                                                     <IconButton >
-                                                        <AddIcon onClick={() => dispatch(plusQuantity(item.product, item.quantity))} />
+                                                        <AddIcon onClick={() => dispatch(plusQuantity(item.id, item.quantity))} />
                                                     </IconButton>
                                                 </div>
                                             </Grid>
