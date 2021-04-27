@@ -1,12 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {Grid, Typography, makeStyles} from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
-import { actAddToCart, addAlert, getProductById } from '../actions';
-import {formatMoney} from '../general/helper';
+import { actAddToCart, addAlert, getProductById } from '../../actions';
+import {formatMoney} from '../../general/helper';
 import RemoveIcon from '@material-ui/icons/Remove';
 import AddIcon from '@material-ui/icons/Add';
-import Alertity from '../general/ConmmonComponent/Alertify';
-import RenderSize from '../components/Cart/RenderSize';
+import RenderSize from '../../components/Cart/RenderSize';
 
 const useStyles = makeStyles({
     container: {

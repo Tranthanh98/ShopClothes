@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import CarouselHomePage from '../components/Home/Carousel';
-import HotSale from '../components/Home/HotSale';
-import NewProduct from '../components/Home/NewProduct';
+import CarouselHomePage from '../../components/Home/Carousel';
+import HotSale from '../../components/Home/HotSale';
+import NewProduct from '../../components/Home/NewProduct';
 import * as Firebase from 'firebase'
 
 function HomePage(){

@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { makeStyles, Grid, Hidden } from '@material-ui/core';
-import logo from '../../assests/brand_logo.jpg'
-import Account from './Account';
-import Menu from './Menu';
-import BreadCrumb from './BreadCrumb';
-import { useSelector, useDispatch } from 'react-redux';
+import { makeStyles } from '@material-ui/core';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { actClickHome } from '../../actions';
+import logo from '../../assests/brand_logo.jpg';
 import { Paths } from '../../routes';
 import BaseModal from '../BaseModal';
-import MenuIcon from '@material-ui/icons/Menu';
+import Account from './Account';
+import BreadCrumb from './BreadCrumb';
+import Menu from './Menu';
 import MenuMobile from './MenuMobile';
 
 const useStyle = makeStyles({
@@ -71,7 +70,7 @@ function AppBarTop(props) {
                             />
                         </div>
                         <div style={{flexGrow:3, justifyContent:"center"}}>
-                            <img onClick={onClickLogo} src={logo} width="25%"/>
+                            <img onClick={onClickLogo} src={logo} width="15%"/>
                         </div>
                         <div style={{flexGrow:1}}>
                             <Account/>

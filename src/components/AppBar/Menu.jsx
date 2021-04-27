@@ -1,16 +1,14 @@
-import React, { Fragment, useEffect, useState } from 'react';
-import { makeStyles } from '@material-ui/styles';
-import { Typography } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { useSelector, useDispatch } from 'react-redux';
-import { GetDistionatyMenu } from '../../general/DistionaryMenuTree';
-import { actBreadCrumb, actClickHome } from '../../actions/index';
+import { makeStyles } from '@material-ui/styles';
+import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from "react-router-dom";
-import Account from './Account';
+import { actBreadCrumb, actClickHome } from '../../actions/index';
 import logo from '../../assests/brand_logo.jpg';
+import { GetDistionatyMenu } from '../../general/DistionaryMenuTree';
 import { Paths } from '../../routes';
-import { GetMenu } from '../../actions/GetMenu/CallApi';
-import menuTree from '../../reducers/menu-tree';
+import Account from './Account';
+import $ from 'jquery';
 
 
 const useStyles = makeStyles({
@@ -47,7 +45,7 @@ const useStyles = makeStyles({
             display: "block"
         },
         "&:hover .MuiSvgIcon-root": {
-            transform: "rotate(90deg)",
+            transform: "rotate(-90deg)",
         },
         "&:hover":{
             backgroundColor:"#d8d6d6"
@@ -96,7 +94,9 @@ function GetBreadCrumb(breadCrumb, mapMenu, menuItem) {
 
 function Menu() {
     let history = useHistory();
-    const [scrPosition, setScrPosition] = useState(0);
+    const refMenu = useRef();
+    const refAccount = useRef();
+    const refImg = useRef();
     const [mapMenu, SetMapMenu] = useState(new Map());
     const classes = useStyles();
     const menuTrees = useSelector(state => state.menuTrees);
@@ -108,7 +108,38 @@ function Menu() {
         window.addEventListener("scroll", _handleScroll)
     }, []);
     const _handleScroll = () => {
-        setScrPosition(window.pageYOffset);
+        let currPosition = window.scrollY;
+        if(currPosition > 102){
+            $(refMenu.current).css({
+                position: "fixed",
+                top: "15px",
+                "background-color": "#f3f3f3",
+                "box-shadow": "0px 8px 8px 0px rgba(0,0,0,0.2)",
+                width: "100%",
+                "z-index": 2,
+                transition: "all 1s",
+                height: 45
+            });
+            $(refAccount.current).css({
+                "display": "block",
+                "margin-bottom":"23px"
+            });
+            $(refImg.current).css("display", "block")
+        }
+        else{
+            $(refMenu.current).css({
+                position: "",
+                top: "",
+                "background-color": "",
+                "box-shadow": "",
+                width: "",
+                "z-index": "",
+                transition: "",
+                height: ""
+            });
+            $(refAccount.current).css("display", "none");
+            $(refImg.current).css("display", "none")
+        }
 
     }
 
@@ -150,8 +181,10 @@ function Menu() {
     }
 
     return (
-        <div className={`${classes.root} ${scrPosition > 102 ? classes.fixedMenu : null}`}>
-            <img style={{ display: scrPosition > 102 ? "block" : "none" }} onClick={onClickLogo} src={logo} width="100px" />
+        <div ref={refMenu} className={classes.root}>
+            <img ref={refImg}
+                 style={{ display: "none" }} 
+                 onClick={onClickLogo} src={logo} width="100px" />
             <div className={classes.menuWrapper}>
                 {
                     menuTrees.map((menuItem, index) => {
@@ -174,11 +207,14 @@ function Menu() {
                     })
                 }
             </div>
-            {
+            <div style={{display:"none"}} ref={refAccount}>
+                <Account/>
+            </div>
+            {/* {
                 scrPosition > 102 ? (
                     <Account />
                 ) : null
-            }
+            } */}
 
         </div>
     )

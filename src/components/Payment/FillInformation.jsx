@@ -1,7 +1,8 @@
 import { Button, Grid, TextField, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
-import React from 'react';
+import React, { useEffect } from 'react';
 import AsyncDropDown from '../../general/ConmmonComponent/AsyncDropDown';
+import * as httpClient from '../../general/HttpClient';
 
 const useStyle = makeStyles({
     login:{
@@ -26,6 +27,12 @@ const useStyle = makeStyles({
 
 function FillInformation(props){
     const classes = useStyle();
+    // useEffect(()=>{
+    //     ( async ()=>{
+    //         let data = await httpClient.sendGet("https://thongtindoanhnghiep.co/api/city");
+    //         console.log("data:", data);
+    //     })();
+    // }, []);
     return (
         <div className={classes.paddingComponent}>
             

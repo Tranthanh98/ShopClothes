@@ -3,11 +3,11 @@ import axios from 'axios'
 
 
 const config = {
-   baseURL: 'https://localhost:44366/api', 
-   headers: { 
-    'Access-Control-Allow-Origin' : '*',
-    'Access-Control-Allow-Methods' : 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
-  },
+   baseURL: 'http://localhost:57750/api', 
+  //  headers: { 
+  //   'Access-Control-Allow-Origin' : '*',
+  //   'Access-Control-Allow-Methods' : 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
+  // },
 }
 
 const httpClient = axios.create(config)
@@ -74,6 +74,8 @@ export const sendGet = async (url) => {
 }
 
 export const upload = async(url, formData, config) =>{
-    let response = await httpClient.post(url, formData, config);
+    let response = await httpClient.post(url, formData, {headers: {
+      'Content-Type': 'multipart/form-data'
+    }});
     return response;
 }

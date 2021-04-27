@@ -10,7 +10,10 @@ const useStyle = makeStyles({
         justifyContent:"center",
         alignItems:"center",
         cursor:"pointer",
-        margin:5
+        margin:5,
+        "&:hover":{
+            backgroundColor:"gray"
+        }
     },
     containerSize: {
         display:"flex",

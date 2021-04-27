@@ -55,7 +55,7 @@ function LayoutListProduct(props){
                 {
                     productList.map((i, index)=>{
                         return (
-                            <Grid key={i.id} item xs={12} sm={6} md={3} lg={3}>
+                            <Grid key={i.id} item xs={12} sm={6} md={4} lg={3}>
                                 <Product
                                     name={i.name}
                                     image={i.image}

@@ -1,0 +1,1 @@
+export const SELECT_MENU_ADMIN = "SELECT_MENU_ADMIN";
