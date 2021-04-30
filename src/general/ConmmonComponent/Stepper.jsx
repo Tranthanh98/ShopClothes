@@ -1,5 +1,7 @@
 import { Step, StepLabel, Stepper } from '@material-ui/core';
 import React, { useState } from 'react';
+import routes from '../../routes';
+import { Route, Switch } from 'react-router';
 
 function StepperComponent(props){
     let {steps, children} = props;
@@ -26,9 +28,10 @@ function StepperComponent(props){
                 </Step>
                 ))}
             </Stepper>
-            <div>
+            <Switch>
+                
                 {_children[activeStep]}
-            </div>
+            </Switch>
         </div>
     )
 }

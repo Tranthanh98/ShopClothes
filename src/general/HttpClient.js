@@ -20,7 +20,7 @@ const loggerInterceptor = config => {
 // httpClient.interceptors.request.use(authInterceptor);
 httpClient.interceptors.request.use(
   function (config) {
-    // const token = sensitiveStorage.getToken()
+    // const token = sensitiveStorage.getToken();
 
     // if (token) {
     //   config.headers.Authorization = `Bearer ${token}`

@@ -2,15 +2,13 @@ import { Button, makeStyles } from '@material-ui/core';
 import 'firebase/auth';
 import React, { useEffect } from 'react';
 import {
-  BrowserRouter as Router,
 
-  Route, Switch
+    Route, Switch
 } from "react-router-dom";
 import AppBarTop from '../../components/AppBar/AppBarTop';
 import Footer from '../../components/Footer/Footer';
 import Alertity from '../../general/ConmmonComponent/Alertify';
 import routes from '../../routes';
-import ReactGA from 'react-ga';
 
 
 const makeStyle = makeStyles({
