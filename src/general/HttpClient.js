@@ -1,9 +1,10 @@
 import axios from 'axios'
-// import { sensitiveStorage } from './services/SensitiveStorage';
+import eventBus from './EventBus'
 
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const config = {
-   baseURL: 'http://localhost:57750/api', 
+   baseURL: BASE_URL, 
   //  headers: { 
   //   'Access-Control-Allow-Origin' : '*',
   //   'Access-Control-Allow-Methods' : 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
@@ -20,11 +21,11 @@ const loggerInterceptor = config => {
 // httpClient.interceptors.request.use(authInterceptor);
 httpClient.interceptors.request.use(
   function (config) {
-    // const token = sensitiveStorage.getToken();
+    const token = localStorage.getItem('token');
 
-    // if (token) {
-    //   config.headers.Authorization = `Bearer ${token}`
-    // }
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`
+    }
 
 
     return config
@@ -42,6 +43,9 @@ httpClient.interceptors.response.use(
     return response
   },
   error => {
+    if(error.isAxiosError){
+      eventBus.publish('pushlish/networkerror', String(error));
+    }
     if (error.response && error.response.status === 422) {
       return Promise.reject(error)
     } else {

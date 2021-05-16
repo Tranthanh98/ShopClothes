@@ -20,7 +20,7 @@ export const selectSize = (product, size, carts, idItem) =>{
             type: types.ADD_ALERT,
             content : {
                 id : id,
-                title : `Sản phẩm này đã có size ${size} trong giỏ hàng`,
+                title : `Sản phẩm này đã có size này trong giỏ hàng`,
                 status: "error"
             }
         }

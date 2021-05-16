@@ -9,7 +9,7 @@ import {sleep} from '../../general/helper';
 import * as Firebase from 'firebase'
 
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
     root:{
         position: "relative"
     },
@@ -20,7 +20,7 @@ const useStyles = makeStyles({
         justifyContent:"center",
         cursor:"pointer",
         "&:hover":{
-            color:"#337ab7"
+            color:theme.palette.info.main
         }
     },
     containerItem:{
@@ -32,13 +32,13 @@ const useStyles = makeStyles({
           },
           '&::-webkit-scrollbar-thumb': {
             backgroundColor: 'rgba(0,0,0,.1)',
-            borderRadius:"8px"
+            borderRadius:theme.spacing(1)
           }
     },
     item:{
         width:"315px",
-        marginLeft:"5px",
-        marginRight:"5px"
+        marginLeft:theme.spacing(0.5),
+        marginRight:theme.spacing(0.5)
     },
     btnIconArrow:{
         backgroundColor: "rgba(123,243,243, 0.3)",
@@ -58,7 +58,7 @@ const useStyles = makeStyles({
     rightIcon:{
         right:"calc(2%)"
     }
-});
+}));
 export default function NewProduct(props){
     const classes = useStyles();
     let ref = React.createRef();
@@ -106,15 +106,14 @@ export default function NewProduct(props){
                 <ChevronLeftIcon/>
             </div>
             <div ref={ref} className={classes.containerItem}>
-                
                 {
                     props.products.map((i,index)=>{
                         return (
                             <div key={index} className={classes.item}>
                                 <Product
                                     name={i.name}
-                                    image={i.image}
-                                    link={i.link}
+                                    image={i.imageLink}
+                                    link={i.imageLink}
                                     price={i.price}
                                     data={i}
                                 />

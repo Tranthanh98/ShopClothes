@@ -10,7 +10,7 @@ import { useHistory } from 'react-router-dom';
 import { Paths } from '../routes';
 import axios from 'axios';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
     root: {
       minWidth: 250,
       minHeight : 315,
@@ -18,7 +18,8 @@ const useStyles = makeStyles({
       position:"relative",
       "&:hover > div":{
         opacity:1
-      }
+      },
+      padding:theme.spacing(1)
     },
     bullet: {
       display: 'inline-block',
@@ -26,7 +27,7 @@ const useStyles = makeStyles({
       transform: 'scale(0.8)',
     },
     title: {
-      fontSize: 14,
+      fontSize: theme.typography.pxToRem(14),
     },
     pos: {
       marginBottom: 12,
@@ -48,7 +49,7 @@ const useStyles = makeStyles({
         top : "10px"
       }
     }
-});
+}));
 
 function Product(props){
     let history = useHistory();

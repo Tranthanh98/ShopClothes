@@ -32,8 +32,8 @@ export default function RenderSize(props){
             {
                 listSize.map((i, index)=>{
                     return(
-                        <div onClick={()=> onChangeSize(i)} className={`${classes.size} ${sizeSelected == i ? classes.active : null}`} key={index}>
-                            {i}
+                        <div onClick={()=> onChangeSize(i)} className={`${classes.size} ${sizeSelected == i.value ? classes.active : null}`} key={index}>
+                            {i.label}
                         </div>
                     )
                 })

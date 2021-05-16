@@ -30,7 +30,7 @@ function InputFile(props) {
             props.getFile(file, urlImage);
         }
     }, [file]);
-    let key = (new Date()).getTime();
+    let key = (new Date()).getTime()+ props.id;
     return (
         <>
             <input style={{display:"none"}} type="file" onChange={_onFileChange} id={`file-upload${key}`} />

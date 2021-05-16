@@ -22,12 +22,13 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 // import Deposits from './Deposits';
 // import Orders from './Orders';
 import MenuList from './MenuList';
-import { adminRoute } from '../../routes';
-import { Route, Switch } from 'react-router';
+import { adminRoute, Paths } from '../../routes';
+import { Redirect, Route, Switch, useHistory } from 'react-router';
 import { useSelector } from 'react-redux';
 import { Button, FormControl, InputAdornment, InputLabel, OutlinedInput } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import * as httpClient from '../../general/HttpClient';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 const drawerWidth = 240;
 
@@ -45,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-between',
     padding: '0 16px',
     ...theme.mixins.toolbar,
-    backgroundColor:"#223442"
+    backgroundColor: "#223442"
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
@@ -70,7 +71,7 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1,
-    color:"black"
+    color: "black"
   },
   drawerPaper: {
     position: 'relative',
@@ -80,7 +81,7 @@ const useStyles = makeStyles((theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
-    backgroundColor:"#425469"
+    backgroundColor: "#425469"
   },
   drawerPaperClose: {
     overflowX: 'hidden',
@@ -95,7 +96,7 @@ const useStyles = makeStyles((theme) => ({
   },
   appBarSpacer: {
     ...theme.mixins.toolbar,
-    backgroundColor:"#425469"
+    backgroundColor: "#425469"
 
   },
   content: {
@@ -106,7 +107,7 @@ const useStyles = makeStyles((theme) => ({
   container: {
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
-    
+
   },
   paper: {
     padding: theme.spacing(2),
@@ -120,8 +121,8 @@ const useStyles = makeStyles((theme) => ({
   rootCustomHeader: {
     backgroundColor: "red"
   },
-  searchForm:{
-    backgroundColor:"white"
+  searchForm: {
+    backgroundColor: "white"
   }
 }));
 
@@ -134,12 +135,15 @@ export default function HomeAdmin(props) {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
   const currMenu = useSelector(state => state.adminMenu);
-  const _onLoginGoogle = async ()=>{
-    let response = await httpClient.sendPost("/User/GoogleAuthentication")
-    console.log("response:", response);
+  const history = useHistory();
+  const _logout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('userInfor');
+    history.push(Paths.loginAdmin);
   }
+  const user = useSelector(state => state.loginReducer);
+  const localUser = JSON.parse(localStorage.getItem('userInfor'));
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -147,7 +151,6 @@ export default function HomeAdmin(props) {
         <Toolbar className={classes.toolbar}>
           <IconButton
             edge="start"
-            // color="inherit"
             aria-label="open drawer"
             onClick={handleDrawerOpen}
             className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
@@ -158,33 +161,34 @@ export default function HomeAdmin(props) {
             {currMenu.name}
           </Typography>
           <Box>
-            {/* <FormControl variant="outlined"> */}
-              <OutlinedInput
-                // value={values.password}
-                // onChange={handleChange('password')}
-                className={classes.searchForm}
-                placeholder="Tìm kiếm"
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      // onClick={handleClickShowPassword}
-                      // onMouseDown={handleMouseDownPassword}
-                      edge="end"
-                    >
-                      <SearchIcon/>
-                    </IconButton>
-                  </InputAdornment>
-                }
-                labelWidth={70}
-              />
-            {/* </FormControl> */}
+            <OutlinedInput
+              className={classes.searchForm}
+              placeholder="Tìm kiếm"
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    edge="end"
+                  >
+                    <SearchIcon />
+                  </IconButton>
+                </InputAdornment>
+              }
+              labelWidth={70}
+            />
+          </Box>
+          <Box margin="0 8px">
+            <Typography style={{ color: "black" }} >Hello, {user?.data?.fullName || localUser?.fullName }</Typography>
           </Box>
           <IconButton color="inherit">
             <Badge badgeContent={4} color="secondary">
-              <NotificationsIcon style={{color:"black"}} />
+              <NotificationsIcon style={{ color: "black" }} />
             </Badge>
           </IconButton>
+          <Box style={{cursor:"pointer"}} color="black" onClick={_logout} margin="0 8px" display="flex">
+            <Typography>Đăng xuất </Typography>
+            <ExitToAppIcon />
+          </Box>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -198,7 +202,7 @@ export default function HomeAdmin(props) {
         <div className={classes.toolbarIcon}>
           <Box color="white" fontSize="25px">PORTAL</Box>
           <IconButton onClick={handleDrawerClose}>
-            <ChevronLeftIcon style={{color:"white"}}/>
+            <ChevronLeftIcon style={{ color: "white" }} />
           </IconButton>
         </div>
         <Divider />
@@ -213,12 +217,17 @@ export default function HomeAdmin(props) {
           <Switch>
             {
               adminRoute.map((route, index) => {
-                return <Route
-                  key={index}
-                  exact
-                  path={route.path}
-                  render={(prop) => <route.component {...prop} />}
-                />
+                if (localStorage.getItem('token')) {
+                  return <Route
+                    key={index}
+                    exact
+                    path={route.path}
+                    render={(prop) => <route.component {...prop} />}
+                  />
+                }
+                else {
+                  return <Redirect to={Paths.loginAdmin} />
+                }
               })
             }
           </Switch>

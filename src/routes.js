@@ -32,17 +32,14 @@ export const Paths = {
     createProduct:"/admin/create-product",
     homeAdmin:"/admin",
     storeManagement:"/admin/store-management",
+    loginAdmin:"/admin/login",
 
     notContent:"*",
 }
-// function createAdminRoute(path, component){
-//     let adminPath = `/amdin${path}`;
-//     return createRoute(adminPath, component);
-// }
 export const adminRoute = [
     createRoute(Paths.homeAdmin, DashboardPage, "Dashboard", DashboardIcon),
     createRoute(Paths.createProduct, CreateProduct, "Thêm sản phẩm mới", AddToPhotosIcon),
-    createRoute(Paths.storeManagement, StoreManagement, "Quản lý cửa hàng", StoreIcon)
+    createRoute(Paths.storeManagement, StoreManagement, "Quản lý cửa hàng", StoreIcon),
 ];
 export default [
     createRoute(Paths.home, HomePage),
@@ -50,7 +47,6 @@ export default [
     createRoute(Paths.detailProduct, DetailProduct),
     createRoute(Paths.payment, Payment),
     createRoute(Paths.confirmOrder, ConfirmOrder),
-
 
     //not found
     createRoute(Paths.notContent, NotContent),

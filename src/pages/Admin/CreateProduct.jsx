@@ -130,8 +130,8 @@ function CreateProduct(props) {
                 name: name.value,
                 price: parseInt(price.value),
                 description: descriptionList,
-                typeId: typeId.value,
-                ProductSizes: sizeList.map(i => { return { ...i, sizeName: undefined } }),
+                typeId: Number(typeId.value),
+                ProductSizes: sizeList.map(i => { return { ...i, sizeName: undefined, sizeId: Number(i.sizeId) } }),
                 TitleImageId: file.file.id,
                 ImageIdList: imgList.map(i => i.file.id)
             }

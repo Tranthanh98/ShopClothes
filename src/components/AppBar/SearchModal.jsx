@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import SearchIcon from '@material-ui/icons/Search';
-import { TextField } from '@material-ui/core';
+import { Box, CircularProgress, TextField } from '@material-ui/core';
 import ClearIcon from '@material-ui/icons/Clear';
 import {initialState} from '../../reducers/products';
 import ItemSearchProduct from '../Common/ItemSearchProduct';
+import * as httpClient from '../../general/HttpClient';
+import { debounce } from 'lodash';
 
 const useStyles = makeStyles({
   rootModal:{
@@ -30,14 +32,6 @@ const useStyles = makeStyles({
   }
 });
 
-function useOnChangeInput(){
-  const [value, setValue] = useState("");
-
-  const _onChange = (e) =>{
-    setValue(e.target.value);
-  }
-  return [value, _onChange];
-}
 
 export default function SearchModal() {
   const classes = useStyles();
@@ -45,7 +39,7 @@ export default function SearchModal() {
     right: false,
   });
   const [productList, setProductList] = React.useState([]);
-  const [value, _onChange] = useOnChangeInput();
+  const [searchText, setSearchText] = React.useState();
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -54,16 +48,27 @@ export default function SearchModal() {
 
     setState({ ...state, [anchor]: open });
   };
-  useEffect(()=> {
+  const _getProduct = async (value)=>{
     if(value){
-      let data = initialState.filter(i => i.name.toLowerCase().includes(value.toLowerCase()));
-      setProductList(data);
-    }
-    else{
-      setProductList([]);
-    }
-  }, [value])
-
+        let RequestModel = {
+          SearchText :  value,
+        }
+        let response = await httpClient.sendPost('/product/get', {RequestModel})
+        if(!response.data.isSuccess){
+          return;
+        }
+        setProductList(response.data.data.data);
+      }
+      else{
+        setProductList([]);
+      }
+  }
+  const _debounceGetData = useCallback(debounce((nextValue)=> _getProduct(nextValue), 600), []);
+  const _onChange = (e)=>{
+    const {value} = e.target;
+    setSearchText(value);
+    _debounceGetData(value);
+  }
   const list = (anchor) => (
     <div
       className={classes.list}
@@ -75,18 +80,22 @@ export default function SearchModal() {
         </div>
         <div className={classes.search}>
             <TextField
-                value={value}
+                value={searchText}
                 onChange={_onChange}
                 placeholder="Nhập tên sản phẩm"
             />
             <SearchIcon/>
         </div>
         <div>
-          {productList.map((item, index)=>{
+          {productList.length > 0 ? productList.map((item, index)=>{
             return (
               <ItemSearchProduct closeModal={toggleDrawer("right", false)} key={item.id} item={item}/>
             )
-          })}
+          }): (
+            <Box display="flex" justifyContent="center">
+              {searchText ?<CircularProgress />:null}
+            </Box>
+          )}
         </div>
     </div>
   );

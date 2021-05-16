@@ -3,9 +3,13 @@ import { makeStyles } from '@material-ui/styles';
 import React, { useEffect } from 'react';
 import { useHistory } from 'react-router';
 import AsyncDropDown from '../../general/ConmmonComponent/AsyncDropDown';
+import { useInputText } from '../../general/CustomHook';
 import * as httpClient from '../../general/HttpClient';
 import { Paths } from '../../routes';
 import CartContent from '../Common/CartContent';
+import * as yup from 'yup';
+import { useDispatch } from 'react-redux';
+import {addAlert} from '../../actions'
 
 const useStyle = makeStyles({
     login:{
@@ -31,9 +35,24 @@ const useStyle = makeStyles({
 function FillInformation(props){
     const classes = useStyle();
     const history = useHistory();
+    const dispatch = useDispatch();
     const _gotoPay = ()=>{
-        history.push(Paths.confirmOrder);
+        let arrValidate = [name, address, email, phone];
+        if(!name.value || !address.value || !email.value || !phone.value){
+            dispatch(addAlert("Vui lòng điền đầy đủ thông tin", "error"))
+        }
+        else if(arrValidate.some(i=> i.error)){
+            dispatch(addAlert("Thông tin không chính xác", "error"))
+        }else
+        {
+            history.push(Paths.confirmOrder);
+        }
     }
+    const name = useInputText("", yup.string().required("Trường này là bắt buộc"));
+    const address = useInputText("", yup.string().required("Trường này là bắt buộc"));
+    const email = useInputText("", yup.string().email("Email không hợp lệ."));
+    const phone = useInputText(0, null, true);
+
     return (
         <Card>
             <CardContent>
@@ -50,17 +69,17 @@ function FillInformation(props){
                         <Card>
                             <CardContent>
                                 <Box margin="16px 0">
-                                    <TextField fullWidth variant="outlined" label="Họ tên" />
+                                    <TextField {...name} fullWidth variant="outlined" label="Họ tên" />
                                 </Box>
                                 <Box margin="16px 0">
-                                    <TextField multiline rows={4} fullWidth variant="outlined" label="Địa chỉ" />
+                                    <TextField {...address} multiline rows={4} fullWidth variant="outlined" label="Địa chỉ" />
                                 </Box>
                                 <Box width="100%" margin="16px 0" display="flex">
                                     <Box width="100%" margin="0 8px 0 0">
-                                        <TextField fullWidth variant="outlined" label="Email" />
+                                        <TextField {...email} fullWidth variant="outlined" label="Email" />
                                     </Box>
                                     <Box>
-                                        <TextField fullWidth variant="outlined" label="Số điện thoại" />
+                                        <TextField {...phone} fullWidth variant="outlined" label="Số điện thoại" />
                                     </Box>
                                 </Box>
                             </CardContent>

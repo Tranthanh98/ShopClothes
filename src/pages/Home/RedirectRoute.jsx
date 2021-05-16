@@ -1,4 +1,4 @@
-import { Button, makeStyles } from '@material-ui/core';
+import { Button, makeStyles, ThemeProvider } from '@material-ui/core';
 import 'firebase/auth';
 import React, { useEffect } from 'react';
 import {
@@ -8,6 +8,8 @@ import {
 import AppBarTop from '../../components/AppBar/AppBarTop';
 import Footer from '../../components/Footer/Footer';
 import Alertity from '../../general/ConmmonComponent/Alertify';
+import { sleep } from '../../general/helper';
+import theme from '../../general/theme';
 import routes from '../../routes';
 
 
@@ -76,24 +78,9 @@ function RedirectRoute(props) {
     }
     useEffect(() => {
         window.addEventListener('scroll', onScroll);
-        window.gtag('js', new Date())
-        window.gtag('config', "G-6TE11L1J56")
     }, []);
-
-    // useEffect(()=>{
-    //     // console.log("location:", window.location);
-    //     // ReactGA.initialize("G-6TE11L1J56",{
-    //     //     debug: true, 
-    //     //     gaOptions:{
-    //     //       siteSpeedSampleRate: 100
-    //     //      } 
-    //     //    });
-    //     //  console.log("React GA:", ReactGA);
-    //     // ReactGA.pageview(window.location.pathname + window.location.search);
-        
-    //   }, [window.location.pathname])
     return (
-        <>
+        <ThemeProvider theme={theme}>
             <AppBarTop isMobile={isMobile} />
             <div className={classes.root} style={{ position: isMobile ? "relative" : "", top: isMobile ? 60 : null }}>
                 <Switch>
@@ -113,12 +100,11 @@ function RedirectRoute(props) {
                     <Button>Đăng ký</Button>
                 </div>
                 <Footer />
-                <Alertity />
                 <button onClick={scrollToTop} id="btn" className={classes.btnScrollTop}>
                     <i className="fas fa-arrow-up"></i>
                 </button>
             </div>
-        </>
+        </ThemeProvider>
     )
 }
 export default RedirectRoute;

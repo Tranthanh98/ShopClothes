@@ -5,7 +5,6 @@ import FillInformation from './FillInformation'
 
 export default class Payment extends BasePayment {
     
-
     childrenRender = ()=> {
         return <FillInformation/>
     }

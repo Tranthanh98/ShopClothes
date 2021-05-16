@@ -18,6 +18,7 @@ export default function GetMainImage(props) {
                     <InputFile
                         title="Tải ảnh lên"
                         getFile={props.getFile}
+                        id="titleImg"
                     />
                     {
                         props.file.url ? (

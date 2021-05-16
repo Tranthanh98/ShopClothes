@@ -11,18 +11,20 @@ import { Badge, Drawer, Popover } from '@material-ui/core';
 import SearchModal from './SearchModal';
 import CartContainer from '../../containers/CartContainer';
 import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router';
+import { Paths } from '../../routes';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
     acc:{
         position:"absolute",
         display:"flex",
         right:"calc(0% + 25px)"
     },
     pd:{
-        paddingLeft:"5px",
-        paddingRight:"5px"
+        paddingLeft: theme.spacing(1),
+        paddingRight: theme.spacing(1)
     }
-})
+}));
 
 function Account() {
     const classes = useStyles();
@@ -86,6 +88,7 @@ export function SimpleMenu() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const history = useHistory();
 
   return (
     <div>
@@ -100,6 +103,8 @@ export function SimpleMenu() {
         <MenuItem onClick={handleClose}>Profile</MenuItem>
         <MenuItem onClick={handleClose}>My account</MenuItem>
         <MenuItem onClick={handleClose}>Logout</MenuItem>
+        <MenuItem onClick={()=> history.push(Paths.loginAdmin)}>Quản trị</MenuItem>
+
       </Menu>
     </div>
   );

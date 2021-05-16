@@ -11,6 +11,7 @@ import RenderSize from '../components/Cart/RenderSize';
 import { useHistory } from 'react-router-dom';
 import { Paths } from '../routes';
 import * as Firebase from 'firebase';
+import CartContent from '../components/Common/CartContent';
 
 const useStyles = makeStyles({
     rootCart: {
@@ -38,8 +39,6 @@ const CartContainer = (props) => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const history = useHistory();
-
-    const [sizes, setSize] = useState([]);
     const totalPrice = carts.reduce((price, item) => {
         return price += (Number(item.product.price) * Number(item.quantity))
     }, 0);
@@ -64,56 +63,10 @@ const CartContainer = (props) => {
                 carts.length == 0 ? (
                     <div>Không có sản phẩm nào trong giỏ</div>
                 ) : (
-                        <>
-                            {
-                                carts.map((item, index) => {
-                                    return (
-                                        <Grid key={item.product.id + index + item.product.name} container>
-                                            <Grid item xs={4}>
-                                                <img width="70%" src={item.product.image} />
-                                            </Grid>
-                                            <Grid item xs={7}>
-                                                <Typography>{item.product.name}</Typography>
-                                                <Typography color="error">{formatMoney(item.product.price, "₫")}</Typography>
-                                                <Typography>Size: <b>{item.size ? item.size : "Chưa chọn size"}</b></Typography>
-                                                <RenderSize 
-                                                    listSize={item.product.size} 
-                                                    sizeSelected={item.size} 
-                                                    onChangeSize={(sizeSelected)=>{
-                                                        dispatch(selectSize(item.product, sizeSelected, carts, item.id))}
-                                                    }
-                                                />
-                                                <div className={classes.quantity}>
-                                                    <IconButton>
-                                                        <RemoveIcon onClick={() => dispatch(subQuantity(item.id, item.quantity))} />
-                                                    </IconButton>
-                                                    <Typography>{item.quantity}</Typography>
-                                                    <IconButton >
-                                                        <AddIcon onClick={() => dispatch(plusQuantity(item.id, item.quantity))} />
-                                                    </IconButton>
-                                                </div>
-                                            </Grid>
-                                            <Grid item xs={1}>
-                                                <CloseIcon onClick={() => _deleteItemFromCart(item)} />
-                                            </Grid>
-                                        </Grid>
-                                    )
-                                })
-                            }
-                        </>
+                        <CartContent isRenderSize={true}/>
                     )
             }
             <Grid container spacing={2}>
-                <Grid item xs={12}>
-                    <div className={classes.totalPrice}>
-                        <Grid container>
-                            <Grid item xs={6}>Thành tiền:</Grid>
-                            <Grid item xs={6}>
-                                <b>{formatMoney(totalPrice, "₫")}</b>
-                            </Grid>
-                        </Grid>
-                    </div>
-                </Grid>
                 <Grid item xs={12}>
                     {
                         carts.length != 0 ? (

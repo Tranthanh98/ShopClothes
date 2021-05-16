@@ -58,7 +58,7 @@ function LayoutListProduct(props){
                             <Grid key={i.id} item xs={12} sm={6} md={4} lg={3}>
                                 <Product
                                     name={i.name}
-                                    image={i.image}
+                                    image={i.imageLink}
                                     link={i.link}
                                     price={i.price}
                                     data={i}

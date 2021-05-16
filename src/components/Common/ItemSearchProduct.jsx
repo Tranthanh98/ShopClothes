@@ -12,7 +12,11 @@ const useStyle = makeStyles({
         boxShadow: "0 2px 5px #888888",
         margin:8,
         borderRadius:4,
-        cursor:"pointer"
+        cursor:"pointer",
+        "&:hover":{
+            background:"lightgray"
+        },
+        padding:8
     },
     nameProduct:{
         color:"black",
@@ -38,12 +42,14 @@ function ItemSearchProduct(props){
     return (
         <div className={classes.itemWrap} onClick={_viewDetailProduct}>
             <div className={classes.leftImage}>
-                <img src={item.image} width={100} height="auto"/>
+                <img src={item.imageLink} width={100} height="auto"/>
             </div>
             <div>
                 <div className={classes.nameProduct}>{item.name}</div>
                 <div className={classes.priceProduct}>{item.price}</div>
-                <div>{item.description}</div>
+                <div>{item?.description?.map(i => {
+                    return <div>-{i}</div>
+                })}</div>
             </div>
         </div>
     )

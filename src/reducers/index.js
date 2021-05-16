@@ -9,6 +9,8 @@ import {alert} from './alert';
 import apiReducer from './Menu/menu-reducer';
 import { selectMenu } from './Menu/selected-menu';
 import { adminMenu } from './admin-menu';
+import { loginReducer } from './login.reducer';
+import { progress } from './progress';
 
 const appReducers = combineReducers({
     products : product,
@@ -20,6 +22,8 @@ const appReducers = combineReducers({
     alert: alert,
     apiReducer: apiReducer,
     selectMenu: selectMenu,
-    adminMenu: adminMenu
+    adminMenu: adminMenu,
+    loginReducer: loginReducer,
+    progress:progress
 });
 export default appReducers;

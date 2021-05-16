@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { actAddToCart, addAlert } from '../../actions';
 import RenderSize from '../../components/Cart/RenderSize';
 import { formatMoney } from '../../general/helper';
+import * as httpClient from '../../general/HttpClient';
 
 const useStyles = makeStyles({
     container: {
@@ -91,12 +92,19 @@ function DetailProduct(props){
     
     useEffect(()=>{
         window.scrollTo(0,0);
-        let proD = stateProduct.find(i=> i.id == props.match.params.id);
-        setProduct(proD);
+        // let proD = stateProduct.find(i=> i.id == props.match.params.id);
+        async function GetDetail(){
+            let response =  await httpClient.sendGet('/product/Detail/'+props.match.params.id);
+            if(!response.data.isSuccess){
+                return;
+            }
+            setProduct(response.data.data);
+        }
+        GetDetail();
         
     },[]);
     const _handleSetSize = (sizeSelected)=>{
-        setSizeSelected(sizeSelected);
+        setSizeSelected(sizeSelected.value);
     }
     const _handleAddCart = ()=>{
         if(sizeSelected){
@@ -112,13 +120,13 @@ function DetailProduct(props){
             {product ? (
                 <Grid container spacing={3}>
                     <Grid item md={6} xs={12}>
-                        <img width="100%" src={product.image}/>
+                        <img width="100%" src={product.imageLink}/>
                     </Grid>
                     <Grid item md={6} xs={12}>
                         <Typography variant="h6">{product.name}</Typography>
                         <Typography className={classes.container} color="error">{formatMoney(product.price)}đ</Typography>
                         <div className={classes.container}>{
-                            product.description.split("-").map((m, index)=>{
+                            product.description.map((m, index)=>{
                                 return <Typography key={index}>-{m}</Typography>
                             })
                             
@@ -144,7 +152,7 @@ function DetailProduct(props){
                         
                     </Grid>
                 </Grid>
-            ):null}
+            ):<Typography>Sản phẩm không tồn tại</Typography>}
         </div>
     )
 }

@@ -11,7 +11,7 @@ import Account from './Account';
 import $ from 'jquery';
 
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme =>({
     root: {
         display: "flex",
         alignItems: "center",
@@ -28,6 +28,9 @@ const useStyles = makeStyles({
         },
         "&:hover .MuiSvgIcon-root": {
             transform: "rotate(180deg)",
+        },
+        "&:hover > span":{
+            color:theme.palette.secondary.main
         },
         position: "relative",
     },
@@ -48,7 +51,7 @@ const useStyles = makeStyles({
             transform: "rotate(-90deg)",
         },
         "&:hover":{
-            backgroundColor:"#d8d6d6"
+            backgroundColor:"#d8d6d6",
         },
         borderBottom: "1px solid #d8d6d6"
     },
@@ -82,7 +85,7 @@ const useStyles = makeStyles({
         top: 0,
         zIndex:10
     }
-})
+}));
 
 function GetBreadCrumb(breadCrumb, mapMenu, menuItem) {
     breadCrumb.unshift(menuItem);
@@ -102,7 +105,6 @@ function Menu() {
     const menuTrees = useSelector(state => state.menuTrees);
     const dispatch = useDispatch();
     useEffect(() => {
-        //dispatch(GetMenu());
         let testMap = GetDistionatyMenu(mapMenu, menuTrees);
         SetMapMenu(testMap);
         window.addEventListener("scroll", _handleScroll)
